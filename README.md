@@ -73,6 +73,7 @@ cd ~/palworldserver/
 ./PalServer.sh
 ```
 # Config
+to stop the serveur CTRL + C ( must )
 ```
 cp ~/palworldserver/DefaultPalWorldSettings.ini ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
 nano ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
