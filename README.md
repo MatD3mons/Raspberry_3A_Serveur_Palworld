@@ -27,4 +27,49 @@ mkdir build && cd build
 cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make install
 sudo systemctl restart systemd-binfmt
+reboot
 
+# install box86
+git clone https://github.com/ptitSeb/box86
+sudo dpkg --add-architecture armhf
+sudo apt install gcc-arm-linux-gnueabihf libc6:armhf libncurses5:armhf libstdc++6:armhf
+cd ~/box86
+mkdir build && cd build
+cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+sudo systemctl restart systemd-binfmt
+reboot
+
+# Palworld server
+sudo useradd palworld -m # -m: Automatically creates the user's home directory.
+exit
+passwd -d $username
+su palworld
+cd /home/palworld
+mkdir ~/steamcmd
+cd ~/steamcmd
+./steamcmd.sh
+quit
+
+# Getting the Steamworks SDK Redistributable for Palworld
+./steamcmd.sh +force_install_dir ~/steamworkssdk +@sSteamCmdForcePlatformType linux +login anonymous +app_update 1007 validate +quit
+mkdir -p ~/.steam/sdk64
+cp ~/steamworkssdk/linux64/steamclient.so ~/.steam/sdk64/
+
+# Installing the Palworld Dedicated Server on a Raspberry Pi
+./steamcmd.sh +force_install_dir ~/palworldserver +@sSteamCmdForcePlatformType linux +login anonymous +app_update 2394010 validate +quit
+cd ~/palworldserver/
+./PalServer.sh
+
+# Config
+cp ~/palworldserver/DefaultPalWorldSettings.ini ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+nano ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+exit
+sudo nano /etc/systemd/system/palworld.service
+sudo systemctl enable palworld
+sudo systemctl start palworld
+// sudo systemctl stop palworld
+// sudo systemctl disable palworld
+
+# Connecting to your Raspberry Pi Palworld Server
+add ip+:8211
