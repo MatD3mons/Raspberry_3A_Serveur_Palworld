@@ -1,5 +1,7 @@
 base on : https://pimylifeup.com/raspberry-pi-palworld-server/ 
 
+take 5 h minimum xD
+
 # Raspberry_3A_Serveur_Palworld
 
 install Raspbian 64 bit.
