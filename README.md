@@ -6,12 +6,15 @@ take 5 h minimum xD
 
 install Raspbian 64 bit.
 
+// try on ubuntu 22.04 64 bits
+
 # a fresh start, so check for updates
 ```
 sudo apt-get update && sudo apt-get upgrade
 ```
 # add SWAP
 ```
+// sudo apt-get install dphys-swapfile
 sudo nano /sbin/dphys-swapfile
 sudo nano /etc/dphys-swapfile
 sudo reboot
@@ -25,29 +28,42 @@ screen -r palworld
 ```
 sudo apt install curl
 ```
-# install box64
+
+# git and cmake
 ```
 sudo apt install git && sudo apt install cmake
-git clone --branch v0.2.4 https://github.com/ptitSeb/box64.git
-cd ~/box64
-mkdir build && cd build
-cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
-sudo systemctl restart systemd-binfmt
-reboot
 ```
+
+# add
+```
+sudo dpkg --add-architecture armhf
+reboot
+sudo apt install gcc-arm-linux-gnueabihf         //    libc6:armhf libncurses5:armhf libstdc++6:armhf
+```
+
 # install box86
 ```
 git clone https://github.com/ptitSeb/box86
-sudo dpkg --add-architecture armhf
-sudo apt install gcc-arm-linux-gnueabihf libc6:armhf libncurses5:armhf libstdc++6:armhf
-cd ~/box86
-mkdir build && cd build
-cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
-sudo make install
+cd ~/box86 && mkdir build && cd build
+cmake .. -DRPI3ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make -j$(nproc)
+//sudo make install
 sudo systemctl restart systemd-binfmt
 reboot
 ```
+
+# install box64
+```
+git clone https://github.com/ptitSeb/box64.git
+cd ~/box64 && mkdir build && cd build
+cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
+
+sudo make -j$(nproc)
+//sudo make install
+sudo systemctl restart systemd-binfmt
+reboot
+```
+
 # Palworld server
 ```
 sudo useradd palworld -m # -m: Automatically creates the user's home directory.
@@ -60,11 +76,15 @@ cd ~/steamcmd
 ./steamcmd.sh
 quit
 ```
+
+
+
 # Getting the Steamworks SDK Redistributable for Palworld
 ```
 mkdir -p ~/.steam/sdk64
 ./steamcmd.sh +force_install_dir ~/steamworkssdk +@sSteamCmdForcePlatformType linux +login anonymous +app_update 1007 validate +quit
-cp ~/steamworkssdk/linux64/steamclient.so ~/.steam/sdk64/
+// cp ~/steamworkssdk/linux64/steamclient.so ~/.steam/sdk64/
+ln -s steamcmd/linux64/steamclient.so ~/.steam/sdk64/steamclient.so
 ```
 
 # Installing the Palworld Dedicated Server on a Raspberry Pi
@@ -73,6 +93,22 @@ cp ~/steamworkssdk/linux64/steamclient.so ~/.steam/sdk64/
 cd ~/palworldserver/
 ./PalServer.sh
 ```
+
+try 
+./steamcmd/steamcmd.sh +login anonymous +app_update 2394010 validate +quit
+mkdir -p ~/.steam/sdk64/
+./steamcmd/steamcmd.sh +login anonymous +app_update 1007 +quit
+cp ~/Steam/steamapps/common/Steamworks\ SDK\ Redist/linux64/steamclient.so ~/.steam/sdk64/
+cd ~/Steam/steamapps/common/PalServer
+
+# Open port
+su pi
+sudo apt-get install ufw
+sudo ufw allow 8211
+
+# Start serveur !!
+./PalServer.sh
+
 # Config
 to stop the serveur CTRL + C ( must )
 ```
