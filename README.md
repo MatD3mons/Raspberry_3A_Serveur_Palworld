@@ -62,10 +62,11 @@ quit
 ```
 # Getting the Steamworks SDK Redistributable for Palworld
 ```
-./steamcmd.sh +force_install_dir ~/steamworkssdk +@sSteamCmdForcePlatformType linux +login anonymous +app_update 1007 validate +quit
 mkdir -p ~/.steam/sdk64
+./steamcmd.sh +force_install_dir ~/steamworkssdk +@sSteamCmdForcePlatformType linux +login anonymous +app_update 1007 validate +quit
 cp ~/steamworkssdk/linux64/steamclient.so ~/.steam/sdk64/
 ```
+
 # Installing the Palworld Dedicated Server on a Raspberry Pi
 ```
 ./steamcmd.sh +force_install_dir ~/palworldserver +@sSteamCmdForcePlatformType linux +login anonymous +app_update 2394010 validate +quit
