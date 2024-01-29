@@ -37,8 +37,8 @@ sudo apt install git && sudo apt install cmake
 # add
 ```
 sudo dpkg --add-architecture armhf
-reboot
-sudo apt install gcc-arm-linux-gnueabihf         //    libc6:armhf libncurses5:armhf libstdc++6:armhf
+sudo apt update
+sudo apt install gcc-arm-linux-gnueabihf libc6:armhf libncurses5:armhf libstdc++6:armhf
 ```
 
 # install box86
@@ -47,9 +47,7 @@ git clone https://github.com/ptitSeb/box86
 cd ~/box86 && mkdir build && cd build
 cmake .. -DRPI3ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
 sudo make -j$(nproc)
-//sudo make install
-sudo systemctl restart systemd-binfmt
-reboot
+sudo make install
 ```
 
 # install box64
@@ -59,47 +57,50 @@ cd ~/box64 && mkdir build && cd build
 cmake .. -DRPI3ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
 sudo make -j$(nproc)
-//sudo make install
+sudo make install
+```
+
+# restart and reboot
+
+```
+apt-get install lib32gcc1
 sudo systemctl restart systemd-binfmt
 reboot
 ```
 
 # Palworld server
+-m: Automatically creates the user's home directory.
 ```
-sudo useradd palworld -m # -m: Automatically creates the user's home directory.
-exit
-passwd -d $username
-su palworld
-cd /home/palworld
-mkdir ~/steamcmd
-cd ~/steamcmd
+screen -R palworld
+sudo useradd palworld -m 
+//passwd -d palworld
+```
+
+```
+cd /home/
+sudo -u palworld -s
+cd /palworld
+mkdir ~/steamcmd && cd ~/steamcmd
+curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
 ./steamcmd.sh
 quit
 ```
 
-
-
 # Getting the Steamworks SDK Redistributable for Palworld
 ```
-mkdir -p ~/.steam/sdk64
-./steamcmd.sh +force_install_dir ~/steamworkssdk +@sSteamCmdForcePlatformType linux +login anonymous +app_update 1007 validate +quit
-// cp ~/steamworkssdk/linux64/steamclient.so ~/.steam/sdk64/
-ln -s steamcmd/linux64/steamclient.so ~/.steam/sdk64/steamclient.so
+mkdir -p ~/.steam/sdk64/
+./steamcmd.sh +login anonymous +app_update 1007 +quit
+cp ~/Steam/steamapps/common/Steamworks\ SDK\ Redist/linux64/steamclient.so ~/.steam/sdk64/
 ```
-
 # Installing the Palworld Dedicated Server on a Raspberry Pi
 ```
-./steamcmd.sh +force_install_dir ~/palworldserver +@sSteamCmdForcePlatformType linux +login anonymous +app_update 2394010 validate +quit
-cd ~/palworldserver/
+./steamcmd.sh +login anonymous +app_update 2394010 validate +quit
+```
+# Run Palworld server
+```
+cd ~/Steam/steamapps/common/PalServer
 ./PalServer.sh
 ```
-
-try 
-./steamcmd/steamcmd.sh +login anonymous +app_update 2394010 validate +quit
-mkdir -p ~/.steam/sdk64/
-./steamcmd/steamcmd.sh +login anonymous +app_update 1007 +quit
-cp ~/Steam/steamapps/common/Steamworks\ SDK\ Redist/linux64/steamclient.so ~/.steam/sdk64/
-cd ~/Steam/steamapps/common/PalServer
 
 # Open port
 su pi
