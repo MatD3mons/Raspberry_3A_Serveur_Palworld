@@ -96,6 +96,13 @@ cp ~/Steam/steamapps/common/Steamworks\ SDK\ Redist/linux64/steamclient.so ~/.st
 ```
 ./steamcmd.sh +login anonymous +app_update 2394010 validate +quit
 ```
+
+# Edit config
+```
+cp ~/palworldserver/DefaultPalWorldSettings.ini ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+nano ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+```
+
 # Run Palworld server
 ```
 cd ~/Steam/steamapps/common/PalServer
@@ -103,49 +110,10 @@ cd ~/Steam/steamapps/common/PalServer
 ```
 
 # Open port
-su pi
+```
 sudo apt-get install ufw
 sudo ufw allow 8211
-
-# Start serveur !!
-./PalServer.sh
-
-# Config
-to stop the serveur CTRL + C ( must )
-```
-cp ~/palworldserver/DefaultPalWorldSettings.ini ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
-nano ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
-```
-```
-ServerPassword="" // change this minimum
 ```
 
-```
-exit
-sudo nano /etc/systemd/system/palworld.service
-```
-```
-[Unit]
-Description=Palworld Server
-Wants=network-online.target
-After=network-online.target
-
-[Service]
-User=palworld
-Group=palworld
-WorkingDirectory=/home/palworld/
-ExecStartPre=/home/palworld/steamcmd/steamcmd.sh +force_install_dir '/home/palworld/palworldserver' +login anonymous +app_update 2394010 +quit
-ExecStart=/home/palworld/palworldserver/PalServer.sh -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS > /dev/null
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-```
-sudo systemctl enable palworld
-sudo systemctl start palworld
-// sudo systemctl stop palworld
-// sudo systemctl disable palworld
-```
 # Connecting to your Raspberry Pi Palworld Server
 connect to 192.168.1.11:8211
