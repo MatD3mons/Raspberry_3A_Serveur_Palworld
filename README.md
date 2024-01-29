@@ -22,7 +22,6 @@ sudo reboot
 # install screen
 ```
 sudo apt install screen
-screen -r palworld
 ```
 # curl
 ```
@@ -99,12 +98,14 @@ cp ~/Steam/steamapps/common/Steamworks\ SDK\ Redist/linux64/steamclient.so ~/.st
 
 # Edit config
 ```
-cp ~/palworldserver/DefaultPalWorldSettings.ini ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
-nano ~/palworldserver/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+cp ~/Steam/steamapps/common/PalServer/DefaultPalWorldSettings.ini ~/Steam/steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
+nano ~/Steam/steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini
 ```
 
 # Run Palworld server
 ```
+screen -r palworld
+sudo -u palworld -s
 cd ~/Steam/steamapps/common/PalServer
 ./PalServer.sh
 ```
