@@ -19,6 +19,10 @@ sudo nano /sbin/dphys-swapfile
 sudo nano /etc/dphys-swapfile
 sudo reboot
 ```
+
+# install Docker
+https://docs.docker.com/engine/install/debian/
+
 # install screen
 ```
 sudo apt install screen
