@@ -21,7 +21,9 @@ sudo reboot
 ```
 
 # install Docker
-https://docs.docker.com/engine/install/debian/
+```
+curl -sSL https://get.docker.com | sh
+```
 
 # install screen
 ```
